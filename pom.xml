@@ -5,8 +5,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.mnetcs</groupId>
-    <artifactId>aspect-edit</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <artifactId>aspect-edit-plus</artifactId>
+    <version>0.5</version>
 
     <properties>
         <maven.compiler.source>21</maven.compiler.source>

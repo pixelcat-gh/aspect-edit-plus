@@ -21,7 +21,7 @@ public class Level extends AbstractResource {
     };
 
     /* The maximum amount of RAM available for level layout data */
-    private static final int DATA_ARRAY_LENGTH = 0x1000;
+    public static final int DATA_ARRAY_LENGTH = 0x1000;
 
     private int[] data;
 

@@ -17,20 +17,14 @@ public class Main {
      */
     public static void main(String[] args) {
         try {
-            UIManager.setLookAndFeel(
-                    UIManager.getSystemLookAndFeelClassName());
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception ex) {}
         
-        SwingUtilities.invokeLater(new Runnable() {
-           
-            @Override
-            public void run() {
-                AspectEdit aspectEdit = new AspectEdit();
-                aspectEdit.setPreferredSize(new Dimension(800,600));
-                aspectEdit.setLocationRelativeTo(null);
-                aspectEdit.setVisible(true);
-            }
-            
+        SwingUtilities.invokeLater(() -> {
+            AspectEdit aspectEdit = new AspectEdit();
+            aspectEdit.setPreferredSize(new Dimension(800,600));
+            aspectEdit.setLocationRelativeTo(null);
+            aspectEdit.setVisible(true);
         });
     }
 
