@@ -48,9 +48,9 @@ import javax.swing.WindowConstants;
  */
 public class AspectEdit extends JFrame {
 
-    public static final String APP_NAME = "Aspect Edit";
+    public static final String APP_NAME = "Aspect Edit Plus";
     public static final int VERSION_MAJOR = 0;
-    public static final int VERSION_MINOR = 4;
+    public static final int VERSION_MINOR = 5;
     
     private NewTilesetAction newTilesetAction;
     private NewBlocksetAction newBlocksetAction;
@@ -277,7 +277,7 @@ public class AspectEdit extends JFrame {
         aboutMenu = new JMenuItem();
 
         setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-        setTitle("Aspect Edit");
+        setTitle("Aspect Edit Plus");
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent evt) {
                 formWindowClosing(evt);

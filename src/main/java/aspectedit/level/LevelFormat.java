@@ -13,6 +13,7 @@ public enum LevelFormat {
 
     S2,
     SC,
-    TT;
+    TT,
+    UNC
 
 }

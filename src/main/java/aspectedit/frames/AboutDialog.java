@@ -46,17 +46,24 @@ public class AboutDialog extends javax.swing.JDialog {
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 11));
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/aspectedit/images/icon.png"))); // NOI18N
-        jLabel1.setText("Aspect Edit - The SMS Resource Editor");
+        jLabel1.setText("Aspect Edit Plus - The SMS Resource Editor");
 
         jLabel2.setText(String.format("Version %d.%d", AspectEdit.VERSION_MAJOR, AspectEdit.VERSION_MINOR));
 
         jTextArea1.setBackground(java.awt.SystemColor.control);
-        jTextArea1.setColumns(20);
+        jTextArea1.setColumns(25);
         jTextArea1.setEditable(false);
         jTextArea1.setFont(new java.awt.Font("Tahoma", 0, 10));
         jTextArea1.setLineWrap(true);
-        jTextArea1.setRows(5);
-        jTextArea1.setText("Fugue Icons\nCopyright (C) 2009 Yusuke Kamiyamane. All rights reserved.\nThe icons are licensed under a Creative Commons Attribution 3.0 license.");
+        jTextArea1.setRows(14);
+        jTextArea1.setText(
+                "Original Aspect Edit by Glitch, 2009\n" +
+                        "Aspect Edit Plus by pixelcat, 2024\n\n" +
+                        "Fugue Icons\n" +
+                        "Copyright (C) 2009 Yusuke Kamiyamane. All rights reserved.\n" +
+                        "The icons are licensed under a Creative Commons\n" +
+                        "Attribution 3.0 license."
+        );
         jScrollPane1.setViewportView(jTextArea1);
 
         okButton.setText("OK");

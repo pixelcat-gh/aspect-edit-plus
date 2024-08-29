@@ -4,6 +4,7 @@ package aspectedit.workers;
 import aspectedit.io.LevelReader;
 import aspectedit.io.ResourceReader;
 import aspectedit.io.TTLevelReader;
+import aspectedit.io.UncLevelReader;
 import aspectedit.level.Level;
 import aspectedit.level.LevelFormat;
 import java.io.File;
@@ -78,15 +79,19 @@ public class OpenLevelWorker extends SwingWorker<Level, Void> {
 
             ResourceReader<Level> reader = null;
 
-            if(format == LevelFormat.S2) {
-                reader = new LevelReader(fin);
-
-            } else if(format == LevelFormat.SC) {
-                reader = new LevelReader(fin);
-                ((LevelReader) reader).useScCompression(true);
-
-            } else {
-                reader = new TTLevelReader(fin);
+            switch(format) {
+                case S2:
+                    reader = new LevelReader(fin);
+                    break;
+                case SC:
+                    reader = new LevelReader(fin);
+                    ((LevelReader) reader).useScCompression(true);
+                    break;
+                case TT:
+                    reader = new TTLevelReader(fin);
+                    break;
+                default:
+                    reader = new UncLevelReader(fin);
             }
 
             reader.setOffset(offset);

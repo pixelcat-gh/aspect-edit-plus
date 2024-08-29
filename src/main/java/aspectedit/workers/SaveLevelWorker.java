@@ -3,6 +3,7 @@ package aspectedit.workers;
 
 import aspectedit.io.LevelWriter;
 import aspectedit.io.TTLevelWriter;
+import aspectedit.io.UncLevelWriter;
 import aspectedit.level.Level;
 import aspectedit.level.LevelFormat;
 import java.io.File;
@@ -65,31 +66,29 @@ public class SaveLevelWorker extends SwingWorker<Level, Void> {
         if(file == null) throw new RuntimeException("File not set for SaveLevelWorker.");
         if(level == null) throw new RuntimeException("Level not set for SaveLevelWorker.");
 
-        FileOutputStream fout = null;
-
         LevelFormat format = level.getLevelFormat();
-        
-        try {
-            fout = new FileOutputStream(file);
+        try (FileOutputStream fout = new FileOutputStream(file)) {
 
-            if(format == LevelFormat.S2) {
-                new LevelWriter(fout).write(level);
-                
-            } else if(format == LevelFormat.SC) {
-                LevelWriter writer = new LevelWriter(fout);
-                writer.setS2Compression(false);
-                writer.write(level);
-
-            } else {
-                new TTLevelWriter(fout).write(level);
+            switch (format) {
+                case S2:
+                    new LevelWriter(fout).write(level);
+                    break;
+                case SC:
+                    LevelWriter writer = new LevelWriter(fout);
+                    writer.setS2Compression(false);
+                    writer.write(level);
+                    break;
+                case TT:
+                    new TTLevelWriter(fout).write(level);
+                    break;
+                default:
+                    new UncLevelWriter(fout).write(level);
             }
 
         } catch (IOException ex) {
             this.exception = ex;
             incomplete = true;
 
-        } finally {
-            try { if(fout != null) fout.close(); } catch (IOException ex) {}
         }
 
         return level;

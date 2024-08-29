@@ -181,6 +181,7 @@ public class PaletteEditorFrame extends JInternalFrame implements TileSelectionL
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
 
         openButton.setAction(openAction);
