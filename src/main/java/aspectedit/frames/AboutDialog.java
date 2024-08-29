@@ -11,6 +11,8 @@
 
 package aspectedit.frames;
 
+import java.awt.*;
+
 /**
  *
  * @author mark
@@ -44,34 +46,33 @@ public class AboutDialog extends javax.swing.JDialog {
         setModal(true);
         setResizable(false);
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 11));
+        jLabel1.setFont(new java.awt.Font("Tahoma", Font.BOLD, 15));
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/aspectedit/images/icon.png"))); // NOI18N
-        jLabel1.setText("Aspect Edit Plus - The SMS Resource Editor");
+        jLabel1.setText("Aspect Edit Plus");
 
         jLabel2.setText(String.format("Version %d.%d", AspectEdit.VERSION_MAJOR, AspectEdit.VERSION_MINOR));
 
         jTextArea1.setBackground(java.awt.SystemColor.control);
         jTextArea1.setColumns(25);
         jTextArea1.setEditable(false);
-        jTextArea1.setFont(new java.awt.Font("Tahoma", 0, 10));
+        jTextArea1.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 10));
         jTextArea1.setLineWrap(true);
         jTextArea1.setRows(14);
         jTextArea1.setText(
-                "Original Aspect Edit by Glitch, 2009\n" +
-                        "Aspect Edit Plus by pixelcat, 2024\n\n" +
+                "This is an editor for the resources of the Master System\n" +
+                        "and Game Gear versions of Sonic 2, Sonic Chaos and\n" +
+                        "Sonic Triple Trouble.\n\n" +
+                        "Original Aspect Edit by Glitch, 2009\n" +
+                        "Additions and fixes by https://pixelcat.space/, 2024\n\n" +
                         "Fugue Icons\n" +
                         "Copyright (C) 2009 Yusuke Kamiyamane. All rights reserved.\n" +
                         "The icons are licensed under a Creative Commons\n" +
-                        "Attribution 3.0 license."
+                        "Attribution 3.0 license.\n"
         );
         jScrollPane1.setViewportView(jTextArea1);
 
         okButton.setText("OK");
-        okButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                okButtonActionPerformed(evt);
-            }
-        });
+        okButton.addActionListener(this::okButtonActionPerformed);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
