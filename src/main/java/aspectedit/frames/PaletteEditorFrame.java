@@ -20,8 +20,11 @@ import aspectedit.frames.action.SavePaletteAsAction;
 import aspectedit.palette.GGPalette;
 import aspectedit.palette.MasterPalette;
 import aspectedit.palette.Palette;
+import aspectedit.tiles.Tileset;
+
 import javax.swing.JInternalFrame;
 import javax.swing.SpinnerNumberModel;
+import java.beans.PropertyChangeEvent;
 
 /**
  *
@@ -64,9 +67,16 @@ public class PaletteEditorFrame extends JInternalFrame implements TileSelectionL
             setTitle("GG Palette Editor");
         }
 
+        openAction.addPropertyChangeListener(this::paletteChanged);
+
         setPalette(palette);
     }
 
+    private void paletteChanged(PropertyChangeEvent evt) {
+        if(evt.getNewValue() instanceof Palette) {
+            setPalette( (Palette) evt.getNewValue() );
+        }
+    }
 
     @SuppressWarnings("unchecked")
     private void updateColourValue() {
@@ -118,8 +128,6 @@ public class PaletteEditorFrame extends JInternalFrame implements TileSelectionL
         saveAsAction.setPalette(palette);
     }
 
-
-
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -151,8 +159,9 @@ public class PaletteEditorFrame extends JInternalFrame implements TileSelectionL
 
         paletteView.setEditingModel(masterPaletteAdapter);
         paletteView.setModel(paletteAdapter);
-        paletteView.setPreferredSize(new java.awt.Dimension(64, 64));
+        paletteView.setPreferredSize(new java.awt.Dimension(128, 64));
         paletteView.addTileSelectionListener(this);
+        paletteView.setZoomFactor(2.0F);
 
         javax.swing.GroupLayout paletteViewLayout = new javax.swing.GroupLayout(paletteView);
         paletteView.setLayout(paletteViewLayout);
@@ -162,7 +171,7 @@ public class PaletteEditorFrame extends JInternalFrame implements TileSelectionL
         );
         paletteViewLayout.setVerticalGroup(
             paletteViewLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 43, Short.MAX_VALUE)
+            .addGap(0, 64, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -177,7 +186,7 @@ public class PaletteEditorFrame extends JInternalFrame implements TileSelectionL
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addComponent(paletteView, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(paletteView, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -214,29 +223,17 @@ public class PaletteEditorFrame extends JInternalFrame implements TileSelectionL
 
         redSpinner.setModel(new javax.swing.SpinnerNumberModel(0, 0, 3, 1));
         redSpinner.setEnabled(false);
-        redSpinner.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                redSpinnerStateChanged(evt);
-            }
-        });
+        redSpinner.addChangeListener(this::redSpinnerStateChanged);
 
         jLabel2.setText("Green:");
 
         greenSpinner.setModel(new javax.swing.SpinnerNumberModel(0, 0, 3, 1));
         greenSpinner.setEnabled(false);
-        greenSpinner.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                greenSpinnerStateChanged(evt);
-            }
-        });
+        greenSpinner.addChangeListener(this::greenSpinnerStateChanged);
 
         blueSpinner.setModel(new javax.swing.SpinnerNumberModel(0, 0, 3, 1));
         blueSpinner.setEnabled(false);
-        blueSpinner.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                blueSpinnerStateChanged(evt);
-            }
-        });
+        blueSpinner.addChangeListener(this::blueSpinnerStateChanged);
 
         jLabel3.setText("Blue:");
 
