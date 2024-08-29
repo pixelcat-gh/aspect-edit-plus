@@ -1,6 +1,6 @@
 # Aspect Edit Plus
 
-This is a fork of Aspect Edit to add more features for convenience.
+This is a fork of Aspect Edit (2009) to add more features for convenience.
 
 See original source here: https://bitbucket.org/mark_mcs/aspectedit
 
