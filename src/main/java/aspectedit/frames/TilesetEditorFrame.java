@@ -10,6 +10,7 @@ import aspectedit.components.tileview.adapters.TileArrangerModel;
 import aspectedit.components.tileview.adapters.TilesetViewAdapter;
 import aspectedit.components.tileview.layout.TileViewGridLayout;
 import aspectedit.frames.action.*;
+import aspectedit.images.IconManager;
 import aspectedit.palette.Palette;
 import aspectedit.tiles.FlipHorizontalOp;
 import aspectedit.tiles.FlipVerticalOp;
@@ -72,7 +73,7 @@ public class TilesetEditorFrame
         zoomInAction = new ZoomInAction();
         zoomOutAction = new ZoomOutAction();
         openTilesetAction = new OpenTilesetAction();
-        openPaletteAction = new OpenPaletteAction();
+        openPaletteAction = new OpenPaletteAction("Open Palette", IconManager.getIcon(IconManager.PALETTE));
         saveAction = new SaveTilesetAction();
         saveAsAction = new SaveTilesetAsAction();
         addTileAction = new AddTileAction();
@@ -94,6 +95,8 @@ public class TilesetEditorFrame
 
         renderer = new DefaultTileViewCellRenderer();
         tilesetView.setCellRenderer(renderer);
+        paletteView.setCellRenderer(renderer);
+        arrangerView.setCellRenderer(renderer);
 
         addTileAction.setTileView(tilesetView);
         removeTileAction.setTileView(tilesetView);
@@ -475,11 +478,7 @@ public class TilesetEditorFrame
 
         drawGridCheck.setSelected(true);
         drawGridCheck.setText("Draw Grid");
-        drawGridCheck.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                drawGridCheckActionPerformed(evt);
-            }
-        });
+        drawGridCheck.addActionListener(this::drawGridCheckActionPerformed);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -514,7 +513,7 @@ public class TilesetEditorFrame
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Editor"));
 
         tileEditor.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
-        tileEditor.setZoomFactor(10.0F);
+        tileEditor.setZoomFactor(25.0F);
         tileEditor.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tileEditorMouseClicked(evt);
@@ -525,11 +524,11 @@ public class TilesetEditorFrame
         tileEditor.setLayout(tileEditorLayout);
         tileEditorLayout.setHorizontalGroup(
             tileEditorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 120, Short.MAX_VALUE)
+            .addGap(0, 200, Short.MAX_VALUE)
         );
         tileEditorLayout.setVerticalGroup(
             tileEditorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 100, Short.MAX_VALUE)
+            .addGap(0, 200, Short.MAX_VALUE)
         );
 
         paletteView.setModel(paletteAdapter);
@@ -579,9 +578,9 @@ public class TilesetEditorFrame
         arrangerView.setEditingModel(tilesetAdapter);
         arrangerView.setMode(TileView.MODE_EDIT);
         arrangerView.setModel(arrangerModel);
-        arrangerView.setPreferredSize(new java.awt.Dimension(190, 190));
+        arrangerView.setPreferredSize(new java.awt.Dimension(323, 323));
         arrangerView.setTileViewLayout(new TileViewGridLayout());
-        arrangerView.setZoomFactor(2.0F);
+        arrangerView.setZoomFactor(4.0F);
         arrangerView.addMouseListener(new MouseAdapter() {
 
             @Override
@@ -610,7 +609,7 @@ public class TilesetEditorFrame
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(arrangerView, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(arrangerView, javax.swing.GroupLayout.PREFERRED_SIZE, 323, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
@@ -734,6 +733,9 @@ public class TilesetEditorFrame
     private void drawGridCheckActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_drawGridCheckActionPerformed
         renderer.setDrawBorder(drawGridCheck.isSelected());
         tilesetView.repaint();
+        arrangerView.repaint();
+        paletteView.repaint();
+        tileEditor.setShowGrid(drawGridCheck.isSelected());
     }//GEN-LAST:event_drawGridCheckActionPerformed
 
 

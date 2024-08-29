@@ -37,20 +37,15 @@ public class RemoveTileAction extends AbstractAction {
     @Override
     public void actionPerformed(ActionEvent e) {
         if(tileView == null || tileView.getSelectedTileIndex() == -1) return;
-		
-        int result = JOptionPane.showConfirmDialog(null,
-                "Are you sure you want to remove the selected tile?",
-                AspectEdit.APP_NAME,
-                JOptionPane.YES_NO_OPTION,
-                JOptionPane.QUESTION_MESSAGE);
 
-        if(result == JOptionPane.YES_OPTION) {
-            tileView.removeTile(
-                    tileView.getSelectedTile());
+        tileView.removeTile(tileView.getSelectedTile());
 
-			tileView.revalidate();
-			tileView.repaint();
-        }
+        int selectedTileIndex = tileView.getSelectedTileIndex();
+
+        tileView.revalidate();
+        tileView.repaint();
+
+        tileView.setSelectedTileIndex(selectedTileIndex);
     }
 
 }

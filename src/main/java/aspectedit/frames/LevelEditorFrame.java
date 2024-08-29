@@ -9,13 +9,7 @@ import aspectedit.components.tileview.TileSelectionListener;
 import aspectedit.components.tileview.TileView;
 import aspectedit.components.tileview.adapters.LevelViewAdapter;
 import aspectedit.components.tileview.adapters.MappingViewAdapter;
-import aspectedit.frames.action.ExportToImageAction;
-import aspectedit.frames.action.OpenBlocksetAction;
-import aspectedit.frames.action.OpenLevelAction;
-import aspectedit.frames.action.OpenPaletteAction;
-import aspectedit.frames.action.OpenTilesetAction;
-import aspectedit.frames.action.SaveLevelAction;
-import aspectedit.frames.action.SaveLevelAsAction;
+import aspectedit.frames.action.*;
 import aspectedit.images.IconManager;
 import aspectedit.level.Level;
 import aspectedit.palette.Palette;
@@ -76,6 +70,10 @@ public class LevelEditorFrame
     private OpenPaletteAction openFgPaletteAction;
     private OpenPaletteAction openBgPaletteAction;
     private ExportToImageAction exportAction;
+    private ZoomInAction zoomInAction;
+    private ZoomOutAction zoomOutAction;
+    private ZoomInAction zoomInAction2;
+    private ZoomOutAction zoomOutAction2;
 
     /* Properties */
     private Level level;
@@ -134,6 +132,14 @@ public class LevelEditorFrame
         
 
         setLevel(level);
+
+        zoomInAction.setTileView(levelView);
+        zoomOutAction.setTileView(levelView);
+        zoomOutAction.setEnabled(false);
+
+        zoomInAction2.setTileView(mappingView);
+        zoomOutAction2.setTileView(mappingView);
+        zoomOutAction2.setEnabled(false);
     }
 
 
@@ -162,6 +168,12 @@ public class LevelEditorFrame
         exportAction = new ExportToImageAction();
         saveAction = new SaveLevelAction();
         saveAsAction = new SaveLevelAsAction();
+
+        zoomInAction = new ZoomInAction();
+        zoomOutAction = new ZoomOutAction();
+
+        zoomInAction2 = new ZoomInAction();
+        zoomOutAction2 = new ZoomOutAction();
     }
 
 
@@ -289,10 +301,14 @@ public class LevelEditorFrame
         if(bgPalette != null) blockset.setBgPalette(bgPalette);
         if(fgPalette != null) blockset.setFgPalette(fgPalette);
         if(tileset != null) blockset.setTileset(tileset);
+        blockset.setTileOffset( (Integer) tileOffsetSpinner.getValue());
 
         levelAdapter.setBlockset(blockset);
         mappingAdapter.setBlockset(blockset);
         levelView.setEditingModel(mappingAdapter);
+
+        levelView.repaint();
+        mappingView.repaint();
     }
 
     public Palette getFgPalette() {
@@ -412,10 +428,19 @@ public class LevelEditorFrame
         jLabel5 = new JLabel();
         jLabel6 = new JLabel();
         jLabel7 = new JLabel();
+        jLabel8 = new JLabel();
+        jLabel9 = new JLabel();
         mouseXLabel = new JLabel();
         mouseYLabel = new JLabel();
         tileXLabel = new JLabel();
         tileYLabel = new JLabel();
+
+        jSeparator2 = new Separator();
+        zoomInButton = new javax.swing.JButton();
+        zoomOutButton = new javax.swing.JButton();
+        zoomInButton2 = new javax.swing.JButton();
+        zoomOutButton2 = new javax.swing.JButton();
+        jSeparator3 = new Separator();
 
         setClosable(true);
         setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
@@ -423,6 +448,8 @@ public class LevelEditorFrame
         setMaximizable(true);
         setResizable(true);
         setTitle("Level Editor");
+        setMinimumSize(new Dimension(320, 240));
+        setPreferredSize(new Dimension(800, 720));
         addInternalFrameListener(new InternalFrameListener() {
             public void internalFrameActivated(InternalFrameEvent evt) {
             }
@@ -509,7 +536,49 @@ public class LevelEditorFrame
         openBgPaletteButton.setVerticalTextPosition(SwingConstants.BOTTOM);
         jToolBar1.add(openBgPaletteButton);
 
-        jSplitPane1.setDividerLocation(260);
+        jToolBar1.add(jSeparator2);
+
+        jLabel8.setText("Editor zoom:");
+        jToolBar1.add(jLabel8);
+
+        zoomInButton.setAction(zoomInAction);
+        zoomInButton.setToolTipText(zoomInAction.getValue(ZoomInAction.NAME).toString());
+        zoomInButton.setFocusable(false);
+        zoomInButton.setHideActionText(true);
+        zoomInButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        zoomInButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(zoomInButton);
+
+        zoomOutButton.setAction(zoomOutAction);
+        zoomOutButton.setToolTipText(zoomOutAction.getValue(ZoomOutAction.NAME).toString());
+        zoomOutButton.setFocusable(false);
+        zoomOutButton.setHideActionText(true);
+        zoomOutButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        zoomOutButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(zoomOutButton);
+
+        jToolBar1.add(jSeparator3);
+
+        jLabel9.setText("Mapping zoom:");
+        jToolBar1.add(jLabel9);
+
+        zoomInButton2.setAction(zoomInAction2);
+        zoomInButton2.setToolTipText(zoomInAction2.getValue(ZoomInAction.NAME).toString());
+        zoomInButton2.setFocusable(false);
+        zoomInButton2.setHideActionText(true);
+        zoomInButton2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        zoomInButton2.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(zoomInButton2);
+
+        zoomOutButton2.setAction(zoomOutAction2);
+        zoomOutButton2.setToolTipText(zoomOutAction2.getValue(ZoomOutAction.NAME).toString());
+        zoomOutButton2.setFocusable(false);
+        zoomOutButton2.setHideActionText(true);
+        zoomOutButton2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        zoomOutButton2.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(zoomOutButton2);
+
+        jSplitPane1.setDividerLocation(500);
         jSplitPane1.setResizeWeight(0.9);
 
         levelView.setCellRenderer(levelRenderer);
@@ -609,26 +678,14 @@ public class LevelEditorFrame
         });
 
         showMappingNumbersCheck.setText("Show numbers in mapping palette");
-        showMappingNumbersCheck.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                showMappingNumbersCheckActionPerformed(evt);
-            }
-        });
+        showMappingNumbersCheck.addActionListener(this::showMappingNumbersCheckActionPerformed);
 
         showLevelNumbersCheck.setText("Show numbers in level view");
-        showLevelNumbersCheck.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                showLevelNumbersCheckActionPerformed(evt);
-            }
-        });
+        showLevelNumbersCheck.addActionListener(this::showLevelNumbersCheckActionPerformed);
 
         showGridCheck.setSelected(true);
         showGridCheck.setText("Show grid lines");
-        showGridCheck.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                showGridCheckActionPerformed(evt);
-            }
-        });
+        showGridCheck.addActionListener(this::showGridCheckActionPerformed);
 
         GroupLayout jPanel3Layout = new GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -841,7 +898,9 @@ public class LevelEditorFrame
 
     private void showGridCheckActionPerformed(ActionEvent evt) {//GEN-FIRST:event_showGridCheckActionPerformed
         levelRenderer.setDrawBorder(showGridCheck.isSelected());
+        mappingRenderer.setDrawBorder(showGridCheck.isSelected());
         levelView.repaint();
+        mappingView.repaint();
     }//GEN-LAST:event_showGridCheckActionPerformed
 
 
@@ -855,6 +914,8 @@ public class LevelEditorFrame
     private JLabel jLabel5;
     private JLabel jLabel6;
     private JLabel jLabel7;
+    private JLabel jLabel8;
+    private JLabel jLabel9;
     private JPanel jPanel1;
     private JPanel jPanel2;
     private JPanel jPanel3;
@@ -862,6 +923,8 @@ public class LevelEditorFrame
     private JScrollPane jScrollPane1;
     private JScrollPane jScrollPane2;
     private Separator jSeparator1;
+    private Separator jSeparator2;
+    private Separator jSeparator3;
     private JSplitPane jSplitPane1;
     private JTabbedPane jTabbedPane1;
     private JToolBar jToolBar1;
@@ -883,6 +946,10 @@ public class LevelEditorFrame
     private JLabel tileXLabel;
     private JLabel tileYLabel;
     private JComboBox widthCombo;
+    private javax.swing.JButton zoomInButton;
+    private javax.swing.JButton zoomOutButton;
+    private javax.swing.JButton zoomInButton2;
+    private javax.swing.JButton zoomOutButton2;
     // End of variables declaration//GEN-END:variables
 
 }

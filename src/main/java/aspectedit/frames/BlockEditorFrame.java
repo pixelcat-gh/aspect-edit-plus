@@ -87,9 +87,9 @@ public class BlockEditorFrame
         zoomInAction3 = new ZoomInAction();
         zoomOutAction3 = new ZoomOutAction();
         openBlocksetAction = new OpenBlocksetAction();
-        openTilesetAction = new OpenTilesetAction();
-        openBgPaletteAction = new OpenPaletteAction();
-        openFgPaletteAction = new OpenPaletteAction();
+        openTilesetAction = new OpenTilesetAction("Open Tileset", IconManager.getIcon(IconManager.TILESET));
+        openBgPaletteAction = new OpenPaletteAction("Open BG Palette", IconManager.getIcon(IconManager.PALETTE));
+        openFgPaletteAction = new OpenPaletteAction("Open FG Palette", IconManager.getIcon(IconManager.PALETTE));
         saveAsAction = new SaveBlocksetAsAction();
         saveAction = new SaveBlocksetAction();
         saveAssemblyAction = new SaveBlocksetAsAssemblyAction();
@@ -527,7 +527,7 @@ public class BlockEditorFrame
         setResizable(true);
         setTitle("Mapping Editor");
         setMinimumSize(new Dimension(320, 240));
-        setPreferredSize(new Dimension(540, 410));
+        setPreferredSize(new Dimension(640, 720));
         addInternalFrameListener(new InternalFrameListener() {
             public void internalFrameActivated(InternalFrameEvent evt) {
             }
@@ -650,7 +650,7 @@ public class BlockEditorFrame
 
         getContentPane().add(jToolBar1, BorderLayout.NORTH);
 
-        jSplitPane1.setDividerLocation(210);
+        jSplitPane1.setDividerLocation(350);
         jSplitPane1.setResizeWeight(1.0);
 
         jPanel4.setBorder(BorderFactory.createEtchedBorder());
