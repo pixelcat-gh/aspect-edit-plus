@@ -36,11 +36,17 @@ import javax.swing.event.InternalFrameListener;
  *
  * @author mark
  */
-public class BlockEditorFrame 
+public class BlockEditorFrame
         extends javax.swing.JInternalFrame
         implements TileSelectionListener {
 
     /* Actions */
+    private ZoomInAction zoomInAction;
+    private ZoomOutAction zoomOutAction;
+    private ZoomInAction zoomInAction2;
+    private ZoomOutAction zoomOutAction2;
+    private ZoomInAction zoomInAction3;
+    private ZoomOutAction zoomOutAction3;
     private OpenBlocksetAction openBlocksetAction;
     private OpenTilesetAction openTilesetAction;
     private OpenPaletteAction openBgPaletteAction;
@@ -73,8 +79,13 @@ public class BlockEditorFrame
 
 
     public BlockEditorFrame(Blockset blockset) {
-
         // create the actions
+        zoomInAction = new ZoomInAction();
+        zoomOutAction = new ZoomOutAction();
+        zoomInAction2 = new ZoomInAction();
+        zoomOutAction2 = new ZoomOutAction();
+        zoomInAction3 = new ZoomInAction();
+        zoomOutAction3 = new ZoomOutAction();
         openBlocksetAction = new OpenBlocksetAction();
         openTilesetAction = new OpenTilesetAction();
         openBgPaletteAction = new OpenPaletteAction();
@@ -100,13 +111,23 @@ public class BlockEditorFrame
         mappingRenderer.setDrawIndex(true);
 
         blocksetRenderer = new DefaultTileViewCellRenderer();
-        
+
         initComponents();
 
         exportImageAction.setTileView(mappingView);
-        
+
         addBlockAction.setTileView(blockView);
         removeBlockAction.setTileView(blockView);
+        zoomInAction.setTileView(blockView);
+        zoomOutAction.setTileView(blockView);
+        zoomOutAction.setEnabled(false);
+
+        zoomInAction2.setTileView(tilesetView);
+        zoomOutAction2.setTileView(tilesetView);
+
+        zoomInAction3.setTileView(mappingView);
+        zoomOutAction3.setTileView(mappingView);
+        zoomOutAction3.setEnabled(false);
 
         // add property listeners to each of the actions
         openBlocksetAction.addPropertyChangeListener(new PropertyChangeListener() {
@@ -191,9 +212,9 @@ public class BlockEditorFrame
             blockEditorSelectModeMenu.setSelected(true);
 
 			editorAdapter.setBlock((Block) evt.getTile());
-			
+
             mappingView.setEditTileIndex(evt.getIndex());
-            
+
         } else if(evt.getSource() == tilesetView && evt.getTile() instanceof Tile) {
 
             // the event came from the tileset view component - set the edit tile
@@ -254,7 +275,7 @@ public class BlockEditorFrame
         vramAddressLabel.setText(String.format("(VRAM: $%X)",
                 tileOffset*32 ));
     }
-    
+
 
     //<editor-fold defaultstate="collapsed" desc="Accessor/Mutators">
     public Tileset getTileset() {
@@ -276,11 +297,11 @@ public class BlockEditorFrame
 
         if(blockset != null) {
             blockset.setTileset(tileset);
-            
+
             blockView.repaint();
             mappingView.repaint();
         }
-        
+
         tilesetView.repaint();
     }
 
@@ -335,7 +356,7 @@ public class BlockEditorFrame
         if(blockset == null) {
             throw new IllegalArgumentException("Blockset cannot be null");
         }
-        
+
         this.blockset = blockset;
 
         // set the tileset if the blockset's tileset is null
@@ -452,6 +473,13 @@ public class BlockEditorFrame
         jPanel1 = new JPanel();
         jScrollPane1 = new JScrollPane();
         blockView = new TileView();
+        jSeparator4 = new Separator();
+        zoomInButton = new javax.swing.JButton();
+        zoomOutButton = new javax.swing.JButton();
+        zoomInButton2 = new javax.swing.JButton();
+        zoomOutButton2 = new javax.swing.JButton();
+        zoomInButton3 = new javax.swing.JButton();
+        zoomOutButton3 = new javax.swing.JButton();
 
         editorModeButtonGroup.add(blockEditorEditModeMenu);
         blockEditorEditModeMenu.setText("Edit Mode");
@@ -603,6 +631,23 @@ public class BlockEditorFrame
         removeBlockButton.setVerticalTextPosition(SwingConstants.BOTTOM);
         jToolBar1.add(removeBlockButton);
 
+        jToolBar1.add(jSeparator4);
+        zoomInButton.setAction(zoomInAction);
+        zoomInButton.setToolTipText(zoomInAction.getValue(ZoomInAction.NAME).toString());
+        zoomInButton.setFocusable(false);
+        zoomInButton.setHideActionText(true);
+        zoomInButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        zoomInButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(zoomInButton);
+
+        zoomOutButton.setAction(zoomOutAction);
+        zoomOutButton.setToolTipText(zoomOutAction.getValue(ZoomOutAction.NAME).toString());
+        zoomOutButton.setFocusable(false);
+        zoomOutButton.setHideActionText(true);
+        zoomOutButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        zoomOutButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(zoomOutButton);
+
         getContentPane().add(jToolBar1, BorderLayout.NORTH);
 
         jSplitPane1.setDividerLocation(210);
@@ -612,9 +657,9 @@ public class BlockEditorFrame
 
         blockEditor.setEditingModel(tilesetAdapter);
         blockEditor.setModel(editorAdapter);
-        blockEditor.setPreferredSize(new Dimension(64, 64));
+        blockEditor.setPreferredSize(new Dimension(160, 160));
         blockEditor.setTileViewLayout(new TileViewGridLayout());
-        blockEditor.setZoomFactor(2.0F);
+        blockEditor.setZoomFactor(5.0F);
         blockEditor.addKeyListener(new KeyAdapter() {
             public void keyPressed(KeyEvent evt) {
                 blockEditorKeyPressed(evt);
@@ -643,7 +688,7 @@ public class BlockEditorFrame
             .addGap(0, 64, Short.MAX_VALUE)
         );
 
-        jSeparator1.setOrientation(SwingConstants.VERTICAL);
+        jSeparator1.setOrientation(SwingConstants.HORIZONTAL);
 
         flipXCheck.setText("Flip X");
         flipXCheck.addChangeListener(new ChangeListener() {
@@ -684,25 +729,28 @@ public class BlockEditorFrame
             jPanel4Layout.createParallelGroup(Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(blockEditor, GroupLayout.PREFERRED_SIZE, 64, GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(ComponentPlacement.UNRELATED)
-                .addComponent(jSeparator1, GroupLayout.PREFERRED_SIZE, 13, GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(ComponentPlacement.RELATED)
-                .addGroup(jPanel4Layout.createParallelGroup(Alignment.LEADING)
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addComponent(flipXCheck)
-                        .addGap(18, 18, 18)
-                        .addComponent(useFgPaletteCheck))
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addComponent(flipYCheck)
-                        .addGap(18, 18, 18)
-                        .addComponent(highPriorityCheck)))
+                .addGroup(jPanel4Layout.createParallelGroup()
+                    .addComponent(blockEditor, GroupLayout.PREFERRED_SIZE, 160, GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jSeparator1, GroupLayout.PREFERRED_SIZE, 160, GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel4Layout.createParallelGroup(Alignment.LEADING)
+                        .addGroup(jPanel4Layout.createSequentialGroup()
+                            .addComponent(flipXCheck)
+                            .addGap(18, 18, 18)
+                            .addComponent(useFgPaletteCheck))
+                        .addGroup(jPanel4Layout.createSequentialGroup()
+                            .addComponent(flipYCheck)
+                            .addGap(18, 18, 18)
+                            .addComponent(highPriorityCheck)))
+                )
                 .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
+                .addComponent(blockEditor, GroupLayout.PREFERRED_SIZE, 160, GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(ComponentPlacement.UNRELATED)
+                .addComponent(jSeparator1, GroupLayout.DEFAULT_SIZE, 8, Short.MAX_VALUE)
                 .addGroup(jPanel4Layout.createParallelGroup(Alignment.LEADING)
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGroup(jPanel4Layout.createParallelGroup(Alignment.BASELINE)
@@ -712,8 +760,7 @@ public class BlockEditorFrame
                         .addGroup(jPanel4Layout.createParallelGroup(Alignment.BASELINE)
                             .addComponent(flipYCheck)
                             .addComponent(highPriorityCheck)))
-                    .addComponent(jSeparator1, GroupLayout.DEFAULT_SIZE, 64, Short.MAX_VALUE)
-                    .addComponent(blockEditor, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                )
                 .addContainerGap())
         );
 
@@ -747,18 +794,37 @@ public class BlockEditorFrame
 
         vramAddressLabel.setText("(VRAM: $2000)");
 
+        zoomInButton2.setAction(zoomInAction2);
+        zoomInButton2.setToolTipText(zoomInAction2.getValue(ZoomInAction.NAME).toString());
+        zoomInButton2.setFocusable(false);
+        zoomInButton2.setHideActionText(true);
+        zoomInButton2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        zoomInButton2.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+
+        zoomOutButton2.setAction(zoomOutAction2);
+        zoomOutButton2.setToolTipText(zoomOutAction2.getValue(ZoomOutAction.NAME).toString());
+        zoomOutButton2.setFocusable(false);
+        zoomOutButton2.setHideActionText(true);
+        zoomOutButton2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        zoomOutButton2.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+
         GroupLayout jPanel5Layout = new GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
-            jPanel5Layout.createParallelGroup(Alignment.LEADING)
-            .addGroup(jPanel5Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1)
-                .addPreferredGap(ComponentPlacement.UNRELATED)
-                .addComponent(tileOffsetSpinner, GroupLayout.PREFERRED_SIZE, 75, GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(ComponentPlacement.RELATED)
+            jPanel5Layout.createSequentialGroup()
+            .addContainerGap()
+            .addGroup(jPanel5Layout.createParallelGroup(Alignment.LEADING)
+                .addGroup(jPanel5Layout.createSequentialGroup()
+                    .addComponent(jLabel1)
+                    .addPreferredGap(ComponentPlacement.UNRELATED)
+                    .addComponent(tileOffsetSpinner, GroupLayout.PREFERRED_SIZE, 75, GroupLayout.PREFERRED_SIZE)
+                )
                 .addComponent(vramAddressLabel, GroupLayout.DEFAULT_SIZE, 108, Short.MAX_VALUE)
-                .addContainerGap())
+                .addGroup(jPanel5Layout.createSequentialGroup()
+                    .addComponent(zoomInButton2)
+                    .addComponent(zoomOutButton2)
+                )
+            )
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(Alignment.LEADING)
@@ -767,7 +833,14 @@ public class BlockEditorFrame
                 .addGroup(jPanel5Layout.createParallelGroup(Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(tileOffsetSpinner, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                    .addComponent(vramAddressLabel))
+                )
+                .addPreferredGap(ComponentPlacement.RELATED)
+                .addComponent(vramAddressLabel)
+                .addPreferredGap(ComponentPlacement.UNRELATED)
+                .addGroup(jPanel5Layout.createParallelGroup(Alignment.BASELINE)
+                    .addComponent(zoomInButton2)
+                    .addComponent(zoomOutButton2)
+                )
                 .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -841,6 +914,20 @@ public class BlockEditorFrame
             }
         });
 
+        zoomInButton3.setAction(zoomInAction3);
+        zoomInButton3.setToolTipText(zoomInAction3.getValue(ZoomInAction.NAME).toString());
+        zoomInButton3.setFocusable(false);
+        zoomInButton3.setHideActionText(true);
+        zoomInButton3.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        zoomInButton3.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+
+        zoomOutButton3.setAction(zoomOutAction3);
+        zoomOutButton3.setToolTipText(zoomOutAction3.getValue(ZoomOutAction.NAME).toString());
+        zoomOutButton3.setFocusable(false);
+        zoomOutButton3.setHideActionText(true);
+        zoomOutButton3.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        zoomOutButton3.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+
         GroupLayout jPanel3Layout = new GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -851,12 +938,22 @@ public class BlockEditorFrame
                 .addPreferredGap(ComponentPlacement.RELATED)
                 .addComponent(drawBlocksetGridCheck)
                 .addContainerGap(52, Short.MAX_VALUE))
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(zoomInButton3)
+                    .addPreferredGap(ComponentPlacement.RELATED)
+                    .addComponent(zoomOutButton3)
+                    .addContainerGap(52, Short.MAX_VALUE))
             .addComponent(jScrollPane2)
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(Alignment.LEADING)
             .addGroup(Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addComponent(jScrollPane2, GroupLayout.DEFAULT_SIZE, 302, Short.MAX_VALUE)
+                .addPreferredGap(ComponentPlacement.UNRELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(Alignment.BASELINE)
+                        .addComponent(zoomInButton3)
+                        .addComponent(zoomOutButton3))
                 .addPreferredGap(ComponentPlacement.UNRELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(Alignment.BASELINE)
                     .addComponent(showNumbersCheck)
@@ -1054,6 +1151,7 @@ public class BlockEditorFrame
     private JSeparator jSeparator1;
     private Separator jSeparator2;
     private Separator jSeparator3;
+    private Separator jSeparator4;
     private JSplitPane jSplitPane1;
     private JTabbedPane jTabbedPane1;
     private JToolBar jToolBar1;
@@ -1075,6 +1173,13 @@ public class BlockEditorFrame
     private TileView tilesetView;
     private JCheckBox useFgPaletteCheck;
     private JLabel vramAddressLabel;
+    private javax.swing.JButton zoomInButton;
+    private javax.swing.JButton zoomOutButton;
+    private javax.swing.JButton zoomInButton2;
+    private javax.swing.JButton zoomOutButton2;
+    private javax.swing.JButton zoomInButton3;
+    private javax.swing.JButton zoomOutButton3;
+
     // End of variables declaration//GEN-END:variables
 
 }

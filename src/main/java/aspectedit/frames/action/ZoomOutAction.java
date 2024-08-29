@@ -71,12 +71,12 @@ public class ZoomOutAction extends AbstractAction {
         firePropertyChange("enabled", oldEnabled, isEnabled());
     }
 
-    @Override
-    public boolean isEnabled() {
-        return super.isEnabled()
-                && tileView != null
-                && tileView.getZoomFactor() > 1;
-    }
+//    @Override
+//    public boolean isEnabled() {
+//        return super.isEnabled()
+//                && tileView != null
+//                && tileView.getZoomFactor() > 1;
+//    }
 
 
     @Override
