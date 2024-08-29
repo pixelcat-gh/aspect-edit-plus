@@ -20,7 +20,6 @@ import aspectedit.frames.action.SavePaletteAsAction;
 import aspectedit.palette.GGPalette;
 import aspectedit.palette.MasterPalette;
 import aspectedit.palette.Palette;
-import aspectedit.tiles.Tileset;
 
 import javax.swing.JInternalFrame;
 import javax.swing.SpinnerNumberModel;
