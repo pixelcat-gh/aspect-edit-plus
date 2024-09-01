@@ -265,8 +265,8 @@ public class LevelEditorFrame
 
         tileXLabel.setText(String.valueOf(index % level.getWidth()));
         tileYLabel.setText(String.valueOf(index / level.getWidth()));
-        mouseXLabel.setText(String.valueOf(evt.getX()));
-        mouseYLabel.setText(String.valueOf(evt.getY()));
+        mouseXLabel.setText(String.valueOf( (int) (evt.getX() / levelView.getZoomFactor())));
+        mouseYLabel.setText(String.valueOf( (int) (evt.getY() / levelView.getZoomFactor())));
     }
 
     //<editor-fold defaultstate="collapsed" desc="Accessor/Mutators">
