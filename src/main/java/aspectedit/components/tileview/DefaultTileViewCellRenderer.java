@@ -15,6 +15,7 @@ public class DefaultTileViewCellRenderer implements TileViewCellRenderer {
     private boolean drawIndex = false;
     private Color borderColour = Color.LIGHT_GRAY;
     private Color indexColour = Color.YELLOW;
+    private Color borderColor = Color.BLACK;
 
     public DefaultTileViewCellRenderer() {
 
@@ -77,16 +78,20 @@ public class DefaultTileViewCellRenderer implements TileViewCellRenderer {
         }
 
         if(drawIndex) {
-            g.setColor(indexColour);
+            g.setColor(borderColor);
 
             String value = String.valueOf(model.indexOf(tile));
 
             int sw = fm.stringWidth(value);
 
-            g.drawString(
-                    value,
-                    x + w - sw - 1,
-                    y + h - 1);
+            for (int xOffset = -1; xOffset < 2; xOffset++) {
+                for (int yOffset = -1; yOffset < 2; yOffset++) {
+                    g.drawString(value, x + w - sw - 1 + xOffset, y + h - 1 + yOffset);
+                }
+            }
+
+            g.setColor(indexColour);
+            g.drawString(value, x + w - sw - 1, y + h - 1);
         }
     }
 
