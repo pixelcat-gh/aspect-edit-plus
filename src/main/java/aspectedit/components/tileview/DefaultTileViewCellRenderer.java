@@ -15,7 +15,7 @@ public class DefaultTileViewCellRenderer implements TileViewCellRenderer {
     private boolean drawIndex = false;
     private Color borderColour = Color.LIGHT_GRAY;
     private Color indexColour = Color.YELLOW;
-    private Color borderColor = Color.BLACK;
+    private Color textBorderColor = Color.BLACK;
 
     public DefaultTileViewCellRenderer() {
 
@@ -78,7 +78,7 @@ public class DefaultTileViewCellRenderer implements TileViewCellRenderer {
         }
 
         if(drawIndex) {
-            g.setColor(borderColor);
+            g.setColor(textBorderColor);
 
             String value = String.valueOf(model.indexOf(tile));
 
