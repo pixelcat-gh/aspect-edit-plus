@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.mnetcs</groupId>
-    <artifactId>aspect-edit-plus</artifactId>
+    <artifactId>aspectedit</artifactId>
     <version>0.6</version>
 
     <properties>
