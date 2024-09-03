@@ -50,7 +50,7 @@ public class AspectEdit extends JFrame {
 
     public static final String APP_NAME = "Aspect Edit Plus";
     public static final int VERSION_MAJOR = 0;
-    public static final int VERSION_MINOR = 5;
+    public static final int VERSION_MINOR = 6;
     
     private NewTilesetAction newTilesetAction;
     private NewBlocksetAction newBlocksetAction;

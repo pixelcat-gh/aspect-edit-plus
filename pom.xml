@@ -6,7 +6,7 @@
 
     <groupId>com.mnetcs</groupId>
     <artifactId>aspect-edit-plus</artifactId>
-    <version>0.5</version>
+    <version>0.6</version>
 
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
